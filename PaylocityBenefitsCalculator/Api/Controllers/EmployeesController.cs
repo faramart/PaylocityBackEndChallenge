@@ -54,4 +54,25 @@ public class EmployeesController : ControllerBase
 
         return result;
     }
+
+    [SwaggerOperation(Summary = "Get paycheck preview for specified employee")]
+    [HttpGet("{id}/paycheck")]
+    public async Task<ActionResult<ApiResponse<GetPaycheckPreviewDto>>> GetPaycheckPreview(int id)
+    {
+        var paycheckPreview = await _mediator.Send(new GetPaycheckPreviewQuery(id));
+
+        if (paycheckPreview == null)
+        {
+            return NotFound(new ApiResponse<GetPaycheckPreviewDto>
+            {
+                Success = false
+            });
+        }
+
+        return new ApiResponse<GetPaycheckPreviewDto>
+        {
+            Success = true,
+            Data = paycheckPreview
+        };
+    }
 }

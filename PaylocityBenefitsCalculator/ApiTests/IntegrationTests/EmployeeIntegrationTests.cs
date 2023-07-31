@@ -98,12 +98,31 @@ public class EmployeeIntegrationTests : IntegrationTest
         };
         await response.ShouldReturn(HttpStatusCode.OK, employee);
     }
-    
+
     [Fact]
     //task: make test pass
     public async Task WhenAskedForANonexistentEmployee_ShouldReturn404()
     {
         var response = await HttpClient.GetAsync($"/api/v1/employees/{int.MinValue}");
+        await response.ShouldReturn(HttpStatusCode.NotFound);
+    }
+
+    [Fact]
+    public async Task WhenAskedForAnEmployeePaycheckPreview_ShouldReturnCorrectPaycheckPreview()
+    {
+        var response = await HttpClient.GetAsync("/api/v1/employees/1/paycheck");
+        var employee = new GetPaycheckPreviewDto()
+        {
+            EmployeeId = 1,
+            BenefitCostsPerPaycheck = 461.53846153846153846153846154m // (1000 * 12)/26
+        };
+        await response.ShouldReturn(HttpStatusCode.OK, employee);
+    }
+
+    [Fact]
+    public async Task WhenAskedForEmployeePaycheckPreviewOfNonexistentEmployee_ShouldReturn404()
+    {
+        var response = await HttpClient.GetAsync($"/api/v1/employees/{int.MinValue}/paycheck");
         await response.ShouldReturn(HttpStatusCode.NotFound);
     }
 }

@@ -2,6 +2,9 @@
 
 namespace Api.Persistence;
 
+/// <summary>
+/// Simple in memory data store simulating nosql db.
+/// </summary>
 public class InMemoryDb
 {
     public List<Employee> Employees { get; private set; }
