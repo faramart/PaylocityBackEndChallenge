@@ -3,12 +3,4 @@ using MediatR;
 
 namespace Api.Application.Employees.Queries;
 
-public class GetEmployeeQuery : IRequest<GetEmployeeDto?>
-{
-    public int Id { get; }
-
-    public GetEmployeeQuery(int id)
-    {
-        Id = id;
-    }
-}
+public record GetEmployeeQuery(int Id) : IRequest<GetEmployeeDto?>;

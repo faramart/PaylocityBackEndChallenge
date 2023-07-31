@@ -1,5 +1,8 @@
-﻿using Api.Application.Dependents.Queries;
+﻿using System.ComponentModel.DataAnnotations;
+using Api.Application.Dependents.Commands;
+using Api.Application.Dependents.Queries;
 using Api.Dtos.Dependent;
+using Api.Mapping;
 using Api.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -53,5 +56,35 @@ public class DependentsController : ControllerBase
         };
 
         return result;
+    }
+
+    [SwaggerOperation(Summary = "Create new dependent")]
+    [HttpPost("")]
+    public async Task<ActionResult<ApiResponse>> Create(CreateDependentDto dto)
+    {
+        try
+        {
+            await _mediator.Send(dto.ToCommand());
+            return new ApiResponse
+            {
+                Success = true
+            };
+        }
+        catch (ValidationException e)
+        {
+            return BadRequest(new ApiResponse
+            {
+                Success = false,
+                Error = e.Message
+            });
+        }
+        catch (InvalidOperationException e)
+        {
+            return NotFound(new ApiResponse
+            {
+                Success = false,
+                Error = e.Message
+            });
+        }
     }
 }

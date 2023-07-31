@@ -7,18 +7,18 @@ namespace Api.Application.Dependents.Queries;
 
 public class GetAllDependentsHandler : IRequestHandler<GetAllDependentsQuery ,IEnumerable<GetDependentDto>>
 {
-    private readonly IDependentsRepository _dependentsRepository;
+    private readonly IEmployeesRepository _employeesRepository;
 
-    public GetAllDependentsHandler(IDependentsRepository dependentsRepository)
+    public GetAllDependentsHandler(IEmployeesRepository employeesRepository)
     {
-        _dependentsRepository = dependentsRepository;
+        _employeesRepository = employeesRepository;
     }
 
     public Task<IEnumerable<GetDependentDto>> Handle(GetAllDependentsQuery request, CancellationToken cancellationToken)
     {
-        var dependents = _dependentsRepository.GetAll();
-        var dtos = dependents.Select(x => x.ToDto());
+        var dependents = _employeesRepository.GetAll().SelectMany(e => e.Dependents);
+        var dto = dependents.Select(x => x.ToDto());
 
-        return Task.FromResult(dtos);
+        return Task.FromResult(dto);
     }
 }

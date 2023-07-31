@@ -3,12 +3,4 @@ using MediatR;
 
 namespace Api.Application.Dependents.Queries;
 
-public class GetDependentQuery : IRequest<GetDependentDto?>
-{
-    public int Id { get; }
-
-    public GetDependentQuery(int id)
-    {
-        Id = id;
-    }
-}
+public record GetDependentQuery(int Id) : IRequest<GetDependentDto?>;
